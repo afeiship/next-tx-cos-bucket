@@ -49,7 +49,7 @@
         var self = this;
         var options = nx.mix(null, { ACL: 'public-read' }, inOptions);
         return new Promise(function (resolve, reject) {
-          self.has(inOptions).then(function (ret) {
+          self.has(options).then(function (ret) {
             if (!ret) {
               self
                 .put(options)

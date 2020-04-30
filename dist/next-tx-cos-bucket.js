@@ -2,8 +2,8 @@
  * name: @feizheng/next-tx-cos-bucket
  * description: Tencent cos bucket for next.
  * homepage: https://github.com/afeiship/next-tx-cos-bucket
- * version: 1.0.0
- * date: 2020-04-29T08:28:08.906Z
+ * version: 1.0.1
+ * date: 2020-04-30T01:45:32.837Z
  * license: MIT
  */
 
@@ -58,7 +58,7 @@
         var self = this;
         var options = nx.mix(null, { ACL: 'public-read' }, inOptions);
         return new Promise(function (resolve, reject) {
-          self.has(inOptions).then(function (ret) {
+          self.has(options).then(function (ret) {
             if (!ret) {
               self
                 .put(options)
