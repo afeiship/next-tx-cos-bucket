@@ -2,20 +2,16 @@
  * name: @feizheng/next-tx-cos-bucket
  * description: Tencent cos bucket for next.
  * homepage: https://github.com/afeiship/next-tx-cos-bucket
- * version: 1.0.1
- * date: 2020-04-30T01:45:32.837Z
+ * version: 1.0.2
+ * date: 2020-05-01T02:26:53.210Z
  * license: MIT
  */
 
 (function () {
   var global = global || this || window || Function('return this')();
   var nx = global.nx || require('@feizheng/next-js-core2');
-  var COS = require('cos-nodejs-sdk-v5');
+  var NxTxAbstractCos = require('@feizheng/next-tx-abstract-cos');
   var Promise = require('bluebird');
-  var DEFAULT_OPTIONS = {
-    SecretId: 'COS_SECRETID',
-    SecretKey: 'COS_SECRETKEY'
-  };
 
   var API_HOOKS = {
     del: 'deleteBucketAsync',
@@ -23,12 +19,8 @@
   };
 
   var NxTxCosBucket = nx.declare('nx.TxCosBucket', {
+    extends: NxTxAbstractCos,
     methods: {
-      init: function (inOptions) {
-        this.options = nx.mix(null, DEFAULT_OPTIONS, inOptions);
-        this.cos = new COS(this.options);
-        Promise.promisifyAll(this.cos, { context: this.cos });
-      },
       'put,get,del,head,gets': function (inName) {
         return function (inOptions) {
           this.parseOptions(inOptions);
@@ -37,61 +29,47 @@
       },
       destroy: function (inOptions) {
         var self = this;
-        return new Promise(function (resolve, reject) {
-          self.has(inOptions).then(function (ret) {
-            if (ret) {
-              self
-                .del(inOptions)
-                .then(function (response) {
-                  resolve(response);
-                })
-                .catch(function (err) {
-                  reject(err);
-                });
-            } else {
-              resolve(null);
-            }
-          });
+        return new Promise(function (resolve) {
+          self
+            .has(inOptions)
+            .then(function (ret) {
+              if (ret) {
+                self.del(inOptions).then(resolve).catch(resolve);
+              } else {
+                resolve(null);
+              }
+            })
+            .catch(resolve);
         });
       },
       create: function (inOptions) {
         var self = this;
         var options = nx.mix(null, { ACL: 'public-read' }, inOptions);
-        return new Promise(function (resolve, reject) {
-          self.has(options).then(function (ret) {
-            if (!ret) {
-              self
-                .put(options)
-                .then(function (response) {
-                  resolve(response);
-                })
-                .catch(function (err) {
-                  reject(err);
-                });
-            } else {
-              resolve(null);
-            }
-          });
+        return new Promise(function (resolve) {
+          self
+            .has(options)
+            .then(function (ret) {
+              if (!ret) {
+                self.put(options).then(resolve).catch(resolve);
+              } else {
+                resolve(null);
+              }
+            })
+            .catch(resolve);
         });
       },
       has: function (inOptions) {
         var self = this;
-        return new Promise(function (resolve, reject) {
+        return new Promise(function (resolve) {
           self
             .head(inOptions)
             .then(function () {
               resolve(true);
             })
-            .catch(function (err) {
+            .catch(function () {
               resolve(false);
             });
         });
-      },
-      parseOptions: function (inOptions) {
-        if (!inOptions) return;
-        var appId = this.options.id;
-        var bucket = inOptions.Bucket;
-        bucket && (inOptions.Bucket = bucket.includes(appId) ? bucket : bucket + '-' + appId);
       }
     }
   });

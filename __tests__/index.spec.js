@@ -26,11 +26,11 @@
         });
     });
 
-    test('destroy', function (done) {
+    test.only('destroy', function (done) {
       bucket
         .destroy({
-          Bucket: 'abc',
-          Region: 'ap-chengdu'
+          Bucket: '19967-03-1301823685',
+          Region: 'ap-beijing-fsi'
         })
         .then((res) => {
           console.log(res);
