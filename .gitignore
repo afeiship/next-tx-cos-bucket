@@ -10,4 +10,5 @@ package-lock.json
 .idea
 .vscode
 
-config.json
+# vscode localhistory
+.history

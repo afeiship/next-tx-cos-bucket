@@ -1,6 +1,6 @@
 (function () {
-  var nx = require('@feizheng/next-js-core2');
-  var NxTxCosBucket = require('../src/next-tx-cos-bucket');
+  const NxTxCosBucket = require('../src');
+
   var config = require('./config.json');
   var bucket = new NxTxCosBucket(config);
 

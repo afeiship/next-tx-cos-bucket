@@ -1,5 +1,4 @@
 // https://jestjs.io/docs/en/configuration
-
 module.exports = {
   verbose: true,
   testRegex: [/\.spec.js/],
@@ -8,5 +7,3 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/src/$1'
   }
 };
-
-
