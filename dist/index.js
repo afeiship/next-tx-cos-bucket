@@ -3,7 +3,7 @@
  * description: Tencent cos bucket for next.
  * homepage: https://github.com/afeiship/next-tx-cos-bucket
  * version: 1.0.0
- * date: 2020-11-21 11:00:35
+ * date: 2020-11-21 11:07:37
  * license: MIT
  */
 
